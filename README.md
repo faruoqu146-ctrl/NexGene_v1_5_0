@@ -34,6 +34,8 @@ The AI layer is downstream of structured evidence. It is not the source of truth
 
 ### Development configuration
 
+Copy `.env.example` and set values as needed:
+
 ```bash
 GENOMIC_DATABASE_URL=sqlite:///./nexgene_genomic.db
 GENOMIC_PROVIDER_ID=development-genomics-provider
@@ -45,21 +47,26 @@ NCBI_API_KEY=optional
 CROSSREF_MAILTO=your-contact@example.com
 ```
 
-NCBI requests should identify the application with tool/email and use an API key when higher supported request rates are needed. Crossref recommends a polite contact identity and caching/backoff for API use.
-
 ### Run
 
 ```bash
 docker compose up --build
 ```
 
-Recurring learning cycle, in a development environment:
+Local API:
 
 ```bash
-python scripts/learning_cycle.py
+pip install -r backend/requirements.txt
+uvicorn backend.app.main:app --reload --host 0.0.0.0 --port 8000
 ```
 
-A production deployment should schedule this worker rather than exposing it as an end-user action.
+Tests:
+
+```bash
+DEV_MODE=true python -m pytest backend/tests -v
+```
+
+All 21 tests pass after the v1.5.0 debug pass (SQLite timezone-safe comparisons, valid dummy password hash, DEV_MODE rate limits, contract tests updated).
 
 ### Important boundaries
 
@@ -68,14 +75,6 @@ A production deployment should schedule this worker rather than exposing it as a
 - Live context is contextual information, not a diagnostic measurement.
 - Clinical and genomic compartments remain separately authorized.
 - The current mobile UI remains frozen while testing continues.
-
-## Debug notes (v1.5.0 post-fix)
-
-- SQLite returns naive datetimes; comparisons use `as_utc()` for session expiry and report windows.
-- Dummy password hash regenerated for current passlib.
-- Rate limits raised under `DEV_MODE` for local test suites.
-- Contract tests updated to v1.5.0.
-- All 21 pytest cases pass; sequential stress (30 user flows) OK.
 
 ## Version
 
