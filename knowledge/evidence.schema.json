@@ -1,17 +1,17 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
-  "title": "NexGene Evidence Source",
+  "title": "NexGeneEvidenceRecord",
   "type": "object",
-  "required": ["source_type", "title"],
+  "required": ["id", "source", "title", "retrieved_at"],
   "properties": {
-    "source_type": {"enum": ["guideline", "research", "medical_report", "clinical_reference", "review"]},
-    "title": {"type": "string", "maxLength": 300},
-    "publisher": {"type": ["string", "null"]},
-    "citation": {"type": ["string", "null"]},
-    "url": {"type": ["string", "null"]},
-    "published_year": {"type": ["integer", "null"]},
-    "evidence_grade": {"type": ["string", "null"]},
-    "topic_tags": {"type": "array", "items": {"type": "string"}, "maxItems": 20},
-    "abstract_summary": {"type": ["string", "null"], "maxLength": 8000}
+    "id": {"type": "string"},
+    "source": {"type": "string", "enum": ["pubmed", "crossref", "manual", "learning"]},
+    "title": {"type": "string"},
+    "abstract": {"type": "string"},
+    "doi": {"type": "string"},
+    "pmid": {"type": "string"},
+    "url": {"type": "string"},
+    "retrieved_at": {"type": "string", "format": "date-time"},
+    "provenance": {"type": "object"}
   }
 }
