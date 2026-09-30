@@ -1,45 +1,74 @@
 # NexGene v1.5.0
 
-**NexGene** — personal health intelligence with clinical, genomic, and live evidence layers.
+## Phase 8: Genomic + Live Evidence Intelligence Foundation
 
-## What's new in v1.5.0 (Phase 8)
+v1.5.0 extends the clinical-compartment architecture with a separate genomic compartment, live scholarly retrieval, live environmental context, and a recurring versioned learning cycle.
 
-- **Genomic live intelligence**: structured genomic compartment + live evidence retrieval (PubMed / Crossref).
-- **Clinical compartment**: isolated clinical data plane with contract tests.
-- **Learning cycle**: offline/online learning script for evidence synthesis.
-- Security-hardened FastAPI backend, mobile UI, full test suite (fixed and passing).
+### New layers
 
-## Quick start
+- **Genomic compartment**: separate database, opaque subject references, dual authorization, genomic variants, and polygenic scores with provenance.
+- **Live evidence retrieval**: PubMed/NCBI E-utilities and Crossref metadata adapters.
+- **Live context**: configurable weather/context retrieval based on user-configured city/country.
+- **Recurring learning**: deterministic 90-day personal baseline cycle with model/version provenance.
+- **Learning status**: `/api/v1/intelligence/learning/status` exposes recent learning artifacts for the authenticated user.
+
+### Long-term intelligence direction
+
+```text
+Lifestyle + Physiological + Molecular + Clinical + Genetic
+                         ↓
+                 Data quality / provenance
+                         ↓
+                 Personal longitudinal models
+                         ↓
+             Live evidence + research retrieval
+                         ↓
+                  Evidence-weighted inference
+                         ↓
+                    Safety / escalation
+                         ↓
+                 Factual AI synthesis layer
+```
+
+The AI layer is downstream of structured evidence. It is not the source of truth and is not a substitute for clinical judgment.
+
+### Development configuration
 
 ```bash
-# Backend
-cd backend
-pip install -r requirements.txt
-uvicorn app.main:app --reload
+GENOMIC_DATABASE_URL=sqlite:///./nexgene_genomic.db
+GENOMIC_PROVIDER_ID=development-genomics-provider
+GENOMIC_PROVIDER_KEY=replace-with-a-local-development-secret
+LIVE_CONTEXT_ENABLED=true
+EVIDENCE_LIVE_ENABLED=true
+NCBI_EMAIL=your-contact@example.com
+NCBI_API_KEY=optional
+CROSSREF_MAILTO=your-contact@example.com
+```
 
-# Or Docker
+NCBI requests should identify the application with tool/email and use an API key when higher supported request rates are needed. Crossref recommends a polite contact identity and caching/backoff for API use.
+
+### Run
+
+```bash
 docker compose up --build
 ```
 
-Mobile UI: open `mobile/index.html` (or serve the `mobile/` folder).
-
-## Structure
-
-- `backend/` — FastAPI app (`app/main.py`), requirements, tests
-- `mobile/` — frontend (app.js, index.html, styles.css)
-- `docs/` — phase architecture notes (5–8)
-- `knowledge/` — evidence schema
-- `scripts/learning_cycle.py` — learning / evidence cycle
-
-## Tests
+Recurring learning cycle, in a development environment:
 
 ```bash
-cd backend
-pytest -v
+python scripts/learning_cycle.py
 ```
 
-All contract, security, clinical, intelligence, and v1.5 tests are expected to pass after this fixed package.
+A production deployment should schedule this worker rather than exposing it as an end-user action.
 
-## License / status
+### Important boundaries
 
-Private development prototype. Not for clinical use.
+- No full genomic interpretation or clinical decision support is claimed by this release.
+- Live evidence retrieval is metadata-first; it does not grant unrestricted rights to copyrighted full text.
+- Live context is contextual information, not a diagnostic measurement.
+- Clinical and genomic compartments remain separately authorized.
+- The current mobile UI remains frozen while testing continues.
+
+## Version
+
+`APP_VERSION = 1.5.0`
