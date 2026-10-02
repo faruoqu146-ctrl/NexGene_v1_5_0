@@ -1,1 +1,1 @@
-// placeholder - will be replaced with full content
+// Placeholder - full content will be loaded from extracted file
